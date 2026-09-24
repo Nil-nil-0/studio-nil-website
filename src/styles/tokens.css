@@ -1,97 +1,93 @@
 /* ==========================================================================
    Studio Nil Brands — Design tokens
-   Single source of truth for type, color, space, grid and motion.
-   Every component reads from here; no arbitrary values in components.
+   Black editorial system: #000 ground, #FFF type and logo, photography.
+   Feature Display = expressive statements · Clash Display = everything else.
    ========================================================================== */
 
 :root {
-  /* ---- Typeface roles ---------------------------------------------------- */
-  --font-display: "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  /* ---- Typefaces ---------------------------------------------------------- */
+  --font-feature: "Feature Display", "Times New Roman", Georgia, serif;   /* display */
+  --font-primary: "Clash Display", "Helvetica Neue", Arial, sans-serif;   /* functional */
+  --font-display: var(--font-feature);
+  --font-body: var(--font-primary);
 
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
 
-  /* ---- Type scale -------------------------------------------------------- */
-  --text-display: clamp(3rem, 8vw, 9rem);      /* H1 / hero */
-  --text-h2: clamp(2.5rem, 5vw, 6rem);
-  --text-h3: clamp(2rem, 3vw, 3.5rem);
-  --text-body-lg: 1.125rem;                     /* 18px */
-  --text-body: 1rem;                            /* 16px */
-  --text-caption: 0.8125rem;                    /* 13px */
-  --text-meta: 0.6875rem;                       /* 11px */
-  --text-nav: 0.875rem;                         /* 14px */
+  /* ---- Type scale ---------------------------------------------------------
+     Feature (display)                                                       */
+  --text-hero: clamp(3.5rem, 7.8vw, 9.5rem);      /* hero statement */
+  --text-mega: clamp(3.5rem, 9vw, 11rem);         /* service names, CTA */
+  --text-xl: clamp(3rem, 6.6vw, 8rem);            /* section statements */
+  --text-lg: clamp(2.25rem, 4.2vw, 5rem);         /* process stages */
+  /* Clash (functional) */
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-caption: 0.8125rem;
+  --text-meta: 0.75rem;
+  --text-nav: 0.875rem;
+  --text-strip: clamp(1.25rem, 1.9vw, 2rem);      /* client strip marks */
 
-  --leading-display: 0.92;
-  --leading-heading: 1;
+  --leading-display: 0.9;
   --leading-body: 1.5;
-  --leading-tight: 1.2;
+  --tracking-display: -0.015em;
+  --tracking-body: 0.012em;
+  --tracking-meta: 0.08em;
 
-  --tracking-display: -0.045em;
-  --tracking-heading: -0.03em;
-  --tracking-body: -0.005em;
-  --tracking-meta: 0.08em;                      /* uppercase labels */
-
-  /* ---- Color ------------------------------------------------------------- */
-  --color-ink: #111111;
-  --color-paper: #F4F3EF;
+  /* ---- Colour: black, white, and white at reduced opacity --------------- */
+  --color-black: #000000;
   --color-white: #FFFFFF;
-  --color-gray: #6B6B6B;                        /* 5.0:1 on paper — AA body */
-  --color-line: #D9D8D4;
-  --color-tint: #E9E7E1;                        /* image placeholder ground */
-
-  --bg: var(--color-paper);
-  --fg: var(--color-ink);
-  --fg-muted: var(--color-gray);
-  --rule: var(--color-line);
-  --focus: var(--color-ink);
+  --bg: var(--color-black);
+  --fg: var(--color-white);
+  --fg-muted: rgba(255, 255, 255, 0.56);
+  --fg-faint: rgba(255, 255, 255, 0.18);
+  --img-ground: rgba(255, 255, 255, 0.06);        /* frame shown only while an image loads */
+  --focus: var(--color-white);
 
   /* ---- Space (4 / 8 base) ------------------------------------------------ */
-  --space-1: 0.25rem;   /* 4  */
-  --space-2: 0.5rem;    /* 8  */
-  --space-3: 0.75rem;   /* 12 */
-  --space-4: 1rem;      /* 16 */
-  --space-5: 1.5rem;    /* 24 */
-  --space-6: 2rem;      /* 32 */
-  --space-7: 3rem;      /* 48 */
-  --space-8: 4rem;      /* 64 */
-  --space-9: 6rem;      /* 96 */
-  --space-10: 8rem;     /* 128 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --space-11: 10rem;
+  --space-12: 14rem;
+  --section: clamp(8rem, 14vw, 16rem);           /* vertical rhythm between sections */
 
   /* ---- Grid -------------------------------------------------------------- */
   --grid-columns: 12;
-  --gutter: clamp(1.25rem, 3.4vw, 4rem);        /* page side padding: 20 → 64 */
-  --grid-gap: clamp(0.75rem, 1.6vw, 1.5rem);    /* column gap: 12 → 24 */
-  --header-height: 4.5rem;
+  --gutter: clamp(1.25rem, 2.8vw, 3rem);
+  --grid-gap: clamp(0.75rem, 1.4vw, 1.5rem);
+  --header-height: 5rem;
 
   /* ---- Motion ------------------------------------------------------------ */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);   /* confident deceleration, no overshoot */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-reveal: cubic-bezier(0.76, 0, 0.24, 1);
   --dur-fast: 0.25s;
   --dur-base: 0.45s;
-  --dur-slow: 0.8s;
-  --stagger: 80ms;
+  --dur-slow: 0.9s;
 
   /* ---- Layers ------------------------------------------------------------ */
   --z-media: 1;
   --z-content: 2;
-  --z-reveal: 20;
+  --z-logo: 4;
   --z-header: 30;
-  --z-menu: 40;
 }
 
 @media (max-width: 767px) {
   :root {
-    --text-display: clamp(2.75rem, 12.4vw, 4.5rem);
+    --text-hero: clamp(3rem, 13.5vw, 4.5rem);
+    --text-mega: clamp(3rem, 14vw, 4.5rem);
+    --text-xl: clamp(2.5rem, 11vw, 3.75rem);
+    --text-lg: clamp(2.25rem, 10vw, 3rem);
     --text-body-lg: 1.0625rem;
     --header-height: 4rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  :root {
-    --text-display: clamp(4rem, 9.2vw, 7rem);
   }
 }

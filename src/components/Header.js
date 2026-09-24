@@ -1,40 +1,63 @@
 import { t, LANGS, getLang, setLang, onLangChange } from '../i18n/index.js';
-import { navItems, site } from '../data/site.js';
+import { navItems, contactCta, site } from '../data/site.js';
+import { arrowUpRight } from './icons.js';
+import { brandAsset } from '../lib/brand.js';
 
-// Order in the intro choreography is driven by --i (see motion/intro.js + header.css).
+const logo = brandAsset('logotipo', 'white', 'brand__svg');
+const mark = brandAsset('symbol', 'white', 'brand__svg brand__svg--mark');
+
+// Official logo (logotipo) in the header; the symbol replaces it on phones when
+// supplied. Without the files, a temporary text label keeps the header usable.
+function brandMarkup() {
+  if (!logo) return `<span class="brand__fallback" data-missing-asset="logotipo-white.svg">${site.name}</span>`;
+  return `<span class="brand__logo${mark ? ' has-mark' : ''}">${logo.markup}</span>${mark ? `<span class="brand__mark">${mark.markup}</span>` : ''}`;
+}
+
+// Header: wordmark · three quiet links · language · one clear action.
+// Order in the intro choreography is set in motion/intro.js.
+function langToggle(extraClass = '') {
+  const buttons = LANGS.map(
+    (lang) => `<button type="button" class="lang-toggle__btn" data-lang="${lang}" aria-pressed="${lang === getLang()}" lang="${lang === 'pt' ? 'pt-BR' : 'en'}">${lang.toUpperCase()}</button>`
+  ).join('');
+  return `<div class="lang-toggle ${extraClass}" role="group" data-i18n-attr="aria-label:a11y.language" aria-label="${t('a11y.language')}">${buttons}</div>`;
+}
+
+function talkLink(extraClass = '') {
+  return `
+    <a class="talk-link ${extraClass}" href="${contactCta.href}">
+      <span data-i18n="${contactCta.key}">${t(contactCta.key)}</span>
+      <span class="talk-link__arrow" aria-hidden="true">${arrowUpRight}</span>
+    </a>`;
+}
+
 export function Header() {
   const links = navItems
     .map(
-      (item, i) => `
-      <li data-intro style="--i:${i + 1}">
-        <a class="nav-link" href="${item.href}"><span data-i18n="nav.${item.key}">${t(`nav.${item.key}`)}</span></a>
+      (item) => `
+      <li data-intro>
+        <a class="nav-link" href="${item.href}" data-i18n="nav.${item.key}">${t(`nav.${item.key}`)}</a>
       </li>`
     )
     .join('');
 
-  const langButtons = LANGS.map(
-    (lang) => `<button type="button" class="lang-toggle__btn" data-lang="${lang}" aria-pressed="${lang === getLang()}" lang="${lang === 'pt' ? 'pt-BR' : 'en'}">${lang.toUpperCase()}</button>`
-  ).join('<span class="lang-toggle__sep" aria-hidden="true">/</span>');
-
   return `
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="brand" href="#top" data-intro style="--i:0" data-i18n-attr="aria-label:a11y.home" aria-label="${t('a11y.home')}">
-        <!-- TEXT PLACEHOLDER — replace with the official logo file when supplied -->
-        <span class="brand__wordmark">${site.name}</span>
+      <a class="brand" href="#top" data-intro data-i18n-attr="aria-label:a11y.home" aria-label="${t('a11y.home')}">
+        ${brandMarkup()}
       </a>
 
       <nav class="site-nav" data-i18n-attr="aria-label:a11y.primaryNav" aria-label="${t('a11y.primaryNav')}">
         <ul class="site-nav__list">${links}</ul>
       </nav>
 
-      <div class="lang-toggle" role="group" data-intro style="--i:5" data-i18n-attr="aria-label:a11y.language" aria-label="${t('a11y.language')}">
-        ${langButtons}
+      <div class="site-header__actions" data-intro>
+        ${langToggle()}
+        ${talkLink()}
       </div>
 
-      <button type="button" class="menu-toggle" data-intro style="--i:2" aria-expanded="false" aria-controls="mobile-menu">
+      <button type="button" class="menu-toggle" data-intro aria-expanded="false" aria-controls="mobile-menu">
         <span class="menu-toggle__label" data-i18n="a11y.menuOpen">${t('a11y.menuOpen')}</span>
-        <span class="menu-toggle__bars" aria-hidden="true"><i></i><i></i></span>
       </button>
     </div>
 
@@ -44,8 +67,9 @@ export function Header() {
           .map((item) => `<li><a href="${item.href}" data-i18n="nav.${item.key}">${t(`nav.${item.key}`)}</a></li>`)
           .join('')}
       </ul>
-      <div class="lang-toggle lang-toggle--menu" role="group" data-i18n-attr="aria-label:a11y.language" aria-label="${t('a11y.language')}">
-        ${langButtons}
+      <div class="mobile-menu__foot">
+        ${talkLink('talk-link--menu')}
+        ${langToggle('lang-toggle--menu')}
       </div>
     </div>
   </header>`;

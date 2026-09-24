@@ -1,0 +1,101 @@
+/* ==========================================================================
+   Selected work — large photographs, different widths and offsets on the
+   12-column grid, one line of Clash under each. No cards, borders or shadows.
+   ========================================================================== */
+
+.work { padding-block: var(--section); }
+.work__inner { padding-inline: var(--gutter); }
+
+.work__head {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  align-items: end;
+}
+.work__label { grid-column: 1 / span 3; color: var(--fg-muted); padding-bottom: 1.2em; }
+.work__title {
+  grid-column: 4 / -1;
+  font-family: var(--font-feature);
+  font-size: var(--text-mega);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.work__list {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--space-11);
+  align-items: start;
+  margin-top: var(--space-10);
+}
+.work-item--lead    { grid-column: 1 / span 9;  grid-row: 1; }
+.work-item--aside   { grid-column: 10 / span 3; grid-row: 1; margin-top: 45%; }
+.work-item--wide    { grid-column: 1 / -1;      grid-row: 2; }
+.work-item--small   { grid-column: 2 / span 4;  grid-row: 3; }
+.work-item--feature { grid-column: 7 / span 6;  grid-row: 3; margin-top: var(--space-11); }
+
+.work-item { will-change: transform; }
+.work-item__link { display: block; }
+.work-item__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--ratio, 4 / 3);
+  overflow: hidden;
+  background: var(--img-ground);
+}
+.work-item__plx { position: absolute; inset: -7% 0; display: block; }
+.work-item__img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  color: transparent;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.work-item__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-5);
+  margin-top: var(--space-4);
+  font-size: var(--text-nav);
+}
+.work-item__title { display: inline-flex; align-items: baseline; gap: 0.4em; font-weight: var(--weight-medium); }
+.work-item__arrow { display: inline-flex; opacity: 0; transform: translate(-4px, 4px); transition: opacity var(--dur-fast), transform var(--dur-base) var(--ease-out); }
+.work-item__arrow .icon { width: 0.75em; height: 0.75em; }
+.work-item__discipline { color: var(--fg-muted); }
+
+@media (hover: hover) and (pointer: fine) {
+  .work-item__link:hover .work-item__img { transform: scale(1.03); }
+  .work-item__link:hover .work-item__arrow { opacity: 1; transform: none; }
+}
+
+/* Enter as they reach the viewport (motion/inview.js) */
+html.js .work-item:not(.is-inview) .work-item__link { opacity: 0; transform: translate3d(0, 3rem, 0); }
+html.js .work-item .work-item__link { transition: opacity 0.9s var(--ease-out), transform 1.1s var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .work-item:not(.is-inview) .work-item__link { transform: none; }
+  .work-item__img { transition: none; }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .work-item--lead    { grid-column: 1 / span 8; }
+  .work-item--aside   { grid-column: 9 / span 4; margin-top: 30%; }
+  .work-item--small   { grid-column: 1 / span 5; }
+  .work-item--feature { grid-column: 6 / span 7; }
+}
+
+@media (max-width: 767px) {
+  .work__head, .work__list { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .work__label, .work__title { grid-column: 1 / -1; }
+  .work__label { padding-bottom: var(--space-4); }
+  .work__list { row-gap: var(--space-9); margin-top: var(--space-8); }
+  .work-item { grid-row: auto !important; margin-top: 0 !important; }
+  .work-item--lead, .work-item--wide { grid-column: 1 / -1; }
+  .work-item--aside   { grid-column: 3 / -1; }
+  .work-item--small   { grid-column: 1 / span 4; }
+  .work-item--feature { grid-column: 2 / -1; }
+}

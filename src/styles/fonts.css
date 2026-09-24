@@ -1,0 +1,22 @@
+/* ==========================================================================
+   Studio Nil Brands — official typefaces, loaded locally.
+   Clash Display  → the system: structure, information, interface.
+   Feature Display → the voice: editorial statements, used sparingly.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Clash Display";
+  src: url("../assets/fonts/clash/ClashDisplay-Variable.woff2") format("woff2-variations"),
+       url("../assets/fonts/clash/ClashDisplay-Variable.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Feature Display";
+  src: url("../assets/fonts/feature/FeatureDisplay-Regular-Web.1abb9ba9.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

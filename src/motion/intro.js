@@ -5,20 +5,15 @@ import { prefersReducedMotion } from './prefs.js';
 const SEQUENCE = [
   // [selector, start (s), stagger between matches (s)]
   ['.site-header .brand', 0.0, 0],
-  ['.site-header .menu-toggle', 0.12, 0],
-  ['.site-nav__list > li', 0.12, 0.06],
-  ['.site-header__inner > .lang-toggle', 0.4, 0],
+  ['.site-header .menu-toggle', 0.08, 0],
+  ['.site-nav__list > li', 0.1, 0.05],
+  ['.site-header__actions', 0.3, 0],
   ['.hero__label', 0.3, 0],
-  ['.hero__meta--studio', 0.4, 0],
-  ['.hero__title .line__inner', 0.36, 0.09],
-  ['.hero__support', 0.72, 0],
-  ['.hero__cta .cta', 0.82, 0.07],
-  ['.hero-figure--b', 0.7, 0],
-  ['.hero-figure--a', 0.82, 0],
-  ['.hero-figure--c', 0.94, 0],
-  ['.hero-figure--d', 1.06, 0],
-  ['.hero__meta--place', 1.1, 0],
-  ['.hero__scroll', 1.2, 0],
+  ['.hero__title .line__inner', 0.4, 0.08],     // statement, line by line
+  ['.hero__frame', 0.85, 0],                   // photograph opens
+  ['.hero-logo__inner', 1.2, 0],               // logo rises across it
+  ['.hero__info', 1.4, 0],
+  ['.hero__meta', 1.5, 0],
 ];
 
 const FONT_WAIT_MAX = 900; // ms — never hold the page hostage to a slow font

@@ -1,401 +1,161 @@
 /* ==========================================================================
-   Hero
-   The 12-column grid is structural: text sits on it, and every figure is
-   placed by column (--c) and span (--s) — but figures may start mid-column,
-   overlap each other and bleed past the fold. Grid underneath, editorial on top.
+   Hero — black, layered, editorial.
+   1 · oversized Feature statement, lines set by hand
+   2 · a large photograph on an asymmetric offset
+   3 · the white NIL BRANDS CO. logo crossing it (difference: white on black,
+       negative on the photograph), drifting against the image on scroll
+   4 · minimal Clash information
    ========================================================================== */
 
 .hero {
+  --col: calc((100vw - 2 * var(--gutter) - 11 * var(--grid-gap)) / 12);
+  /* the logo spans the content width; its height follows the SVG's own ratio */
+  --logo-h: calc((100vw - 2 * var(--gutter)) * var(--logo-ratio, 0.12));
   position: relative;
-  container-type: inline-size;
-  min-height: max(100svh, 46rem);
-  overflow-x: clip;                   /* figures bleed sideways without x-scroll… */
-  overflow-y: visible;                /* …and the main frame continues into the next section */
-}
-
-.hero__inner {
-  /* width of one column, derived from the container (not 100vw → no scrollbar drift) */
-  --col: calc((100cqw - 2 * var(--gutter) - (var(--grid-columns) - 1) * var(--grid-gap)) / var(--grid-columns));
-
-  position: relative;
-  min-height: inherit;
+  isolation: isolate;                  /* the blend reads only the hero's own layers */
+  background: var(--bg);
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-  grid-template-rows: auto auto 1fr;
   column-gap: var(--grid-gap);
-  align-content: start;
-  padding: calc(var(--header-height) + var(--space-6)) var(--gutter) var(--space-6);
+  padding: calc(var(--header-height) + var(--space-5)) var(--gutter) var(--section);
 }
 
-/* ---- Metadata ------------------------------------------------------------ */
+/* ---- Label ---------------------------------------------------------------- */
 .hero__label {
-  grid-column: 1 / span 6;
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  z-index: var(--z-content);
-}
-.hero__label-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--fg);
+  grid-column: 5 / span 4;
+  grid-row: 3;
+  margin-top: var(--space-9);
+  color: var(--fg-muted);
 }
 
-.hero__meta { color: var(--fg-muted); z-index: var(--z-content); }
-.hero__meta p { margin: 0; }
-.hero__meta--place p > span { display: block; }
-
-.hero__meta--studio {
-  grid-column: 7 / span 3;
-  grid-row: 1;
-  display: flex;
-  gap: var(--space-6);
-}
-
-.hero__meta--place {
-  position: absolute;
-  left: calc(var(--gutter) + 10 * (var(--col) + var(--grid-gap)));
-  top: 52%;
-  display: grid;
-  gap: var(--space-2);
-  max-width: calc(2 * var(--col) + var(--grid-gap));
-}
-.hero__clock { color: var(--fg); }
-.hero__time { font-variant-numeric: tabular-nums; }
-
-/* ---- Headline ------------------------------------------------------------ */
+/* ---- Statement (Feature, manual lines) ----------------------------------- */
 .hero__title {
   grid-column: 1 / -1;
-  grid-row: 2;
-  margin-top: var(--space-7);
-  position: relative;
-  z-index: var(--z-content);
-  font-weight: var(--weight-medium);
-  pointer-events: none;               /* never block hovering the figures beneath */
-}
-.hero__title-lines { display: block; will-change: transform; }
-
-.line {
-  display: block;
-  overflow: clip;                     /* mask for the line reveal */
-  overflow-clip-margin: 0.12em;       /* keep descenders */
-  padding-bottom: 0.04em;
-  text-wrap: balance;
-}
-.line__inner { display: inline-block; }
-
-/* Typographic composition: the middle line steps in by two columns */
-.line--2 { padding-left: calc(2 * (var(--col) + var(--grid-gap))); }
-
-/* ---- Body + CTA ---------------------------------------------------------- */
-.hero__body {
-  grid-column: 1 / span 4;
-  grid-row: 3;
+  grid-row: 2;                         /* same cell as the stage: type laid over the photograph */
   align-self: start;
-  margin-top: var(--space-7);
-  display: grid;
-  gap: var(--space-6);
+  /* starts under the part of the logo that sits inside the photograph */
+  padding: calc(var(--logo-h) + var(--space-3) + var(--space-6)) var(--space-7) 0;
+  font-family: var(--font-feature);
+  font-size: var(--text-hero);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  position: relative;
   z-index: var(--z-content);
-}
-.hero__support {
-  max-width: 34ch;
-  font-size: var(--text-body-lg);
-  line-height: 1.45;
-  color: var(--fg);
-  text-wrap: pretty;
-}
-
-.hero__cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4) var(--space-6);
-}
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-meta);
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-/* Primary: label + circular arrow; on hover the circle fills and the arrow is replaced */
-.cta__icon {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 2.5rem; height: 2.5rem;
-  border: 1px solid var(--fg);
-  border-radius: 50%;
-  overflow: hidden;
-  isolation: isolate;
-}
-.cta__icon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--fg);
-  border-radius: inherit;
-  transform: scale(0);
-  transition: transform var(--dur-base) var(--ease-out);
-  z-index: -1;
-}
-.cta__arrow {
-  grid-area: 1 / 1;
-  display: inline-flex;
-  transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast) var(--ease-out);
-}
-.cta__arrow--next { transform: translateX(-180%); }
-
-.cta--primary:hover .cta__icon::before,
-.cta--primary:focus-visible .cta__icon::before { transform: scale(1); }
-.cta--primary:hover .cta__arrow,
-.cta--primary:focus-visible .cta__arrow { color: var(--bg); transform: translateX(180%); }
-.cta--primary:hover .cta__arrow--next,
-.cta--primary:focus-visible .cta__arrow--next { transform: translateX(0); }
-
-/* Secondary: text with a rule that re-draws on hover */
-.cta--secondary .cta__label {
-  position: relative;
-  padding-block: var(--space-2);
-}
-.cta--secondary .cta__label::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: currentColor;
-  transform-origin: right;
-  transition: transform var(--dur-base) var(--ease-out);
-}
-.cta--secondary:hover .cta__label::after { animation: rule-redraw 0.7s var(--ease-in-out); }
-@keyframes rule-redraw {
-  0%   { transform: scaleX(1); transform-origin: right; }
-  45%  { transform: scaleX(0); transform-origin: right; }
-  46%  { transform: scaleX(0); transform-origin: left; }
-  100% { transform: scaleX(1); transform-origin: left; }
-}
-
-/* ---- Scroll cue ---------------------------------------------------------- */
-.hero__scroll {
-  position: absolute;
-  left: var(--gutter);
-  bottom: var(--space-6);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  z-index: var(--z-content);
-  color: var(--fg-muted);
-}
-.hero__scroll-line {
-  position: relative;
-  width: 1px; height: 2.5rem;
-  background: var(--rule);
-  overflow: hidden;
-}
-.hero__scroll-line::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--fg);
-  transform-origin: top;
-  animation: scroll-cue 2.4s var(--ease-in-out) infinite;
-}
-@keyframes scroll-cue {
-  0%   { transform: scaleY(0); transform-origin: top; }
-  45%  { transform: scaleY(1); transform-origin: top; }
-  55%  { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
-}
-
-/* ---- Registration marks (grid anchors) ----------------------------------- */
-.reg-mark--br {
-  right: calc(var(--gutter) - 5px);
-  bottom: var(--space-6);
-}
-
-/* ==========================================================================
-   Figures
-   ========================================================================== */
-
-.hero__media { display: contents; }
-
-.hero-figure {
-  --c: 1; --s: 2; --top: 50%; --ratio: 4 / 5;
-  position: absolute;
-  left: calc(var(--gutter) + (var(--c) - 1) * (var(--col) + var(--grid-gap)));
-  top: var(--top);
-  width: calc(var(--s) * var(--col) + (var(--s) - 1) * var(--grid-gap));
-  z-index: var(--z-media);
-  will-change: transform;
-  transition: opacity var(--dur-base) var(--ease-out);
-}
-
-.hero-figure--a { --c: 11;   --s: 2;   --top: calc(var(--header-height) + var(--space-6)); --ratio: 4 / 5; }
-.hero-figure--b { --c: 6;    --s: 4;   --top: 57%; --ratio: 4 / 5; }
-.hero-figure--c { --c: 9.45; --s: 2;   --top: 71%; --ratio: 1 / 1; z-index: calc(var(--z-media) + 1); }
-.hero-figure--d { --c: 3.5;  --s: 1.6; --top: 83%; --ratio: 3 / 2; }
-
-.hero-figure__link {
-  display: block;
-  cursor: pointer;
-}
-
-.hero-figure__frame {
-  position: relative;
-  display: block;
-  aspect-ratio: var(--ratio);
-  max-width: 100%;
-  overflow: hidden;
-  background: var(--color-tint);      /* visible while loading or if an image fails */
-}
-
-.hero-figure__plx {
-  position: absolute;
-  inset: -6% 0;                       /* headroom for the inner scroll parallax */
-  display: block;
-  will-change: transform;
-}
-
-.hero-figure__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  color: transparent;                 /* hide alt text if an image fails; the tinted frame holds the layout */
-  transition: transform 1.1s var(--ease-out);
-}
-
-/* Caption: metadata that surfaces on hover/focus */
-.hero-figure__caption {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1) var(--space-3);
-  margin-top: var(--space-3);
-  color: var(--fg);
-}
-.hero-figure__index { color: var(--fg-muted); }
-.hero-figure__view { display: inline-flex; margin-left: auto; }
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-figure__caption > * {
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-base) var(--ease-out);
-  }
-  .hero-figure:hover .hero-figure__caption > *,
-  .hero-figure:focus-within .hero-figure__caption > * { opacity: 1; transform: none; }
-  .hero-figure:hover .hero-figure__caption > :nth-child(2) { transition-delay: 40ms; }
-  .hero-figure:hover .hero-figure__caption > :nth-child(3) { transition-delay: 80ms; }
-
-  .hero-figure:hover .hero-figure__img { transform: scale(1.035); }
-
-  /* Focus the composition on the figure being explored */
-  .hero__inner:has(.hero-figure:hover) .hero-figure:not(:hover) { opacity: 0.35; }
-}
-
-/* ---- Hover companions (Rejouice principle, Nil Brands interpretation) ----- */
-.reveal-layer {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-reveal);
   pointer-events: none;
 }
-.reveal-layer__item {
-  position: absolute;
-  top: 0; left: 0;
-  width: var(--w, 9rem);
-  aspect-ratio: var(--ratio, 4 / 5);
-  overflow: hidden;
-  background: var(--color-tint);
-  opacity: 0;
-  will-change: transform, opacity;
-  transition: opacity 0.28s var(--ease-out);
+.hero__lines { display: block; }
+.line {
+  display: block;
+  overflow: clip;
+  overflow-clip-margin: 0.14em;
+  padding-bottom: 0.03em;
+  white-space: nowrap;                 /* the line breaks are designed, never accidental */
+  will-change: transform;
 }
-.reveal-layer__item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transform: scale(1.18);
-  transition: transform 0.7s var(--ease-out);
-}
-.reveal-layer__item.is-visible { opacity: 1; }
-.reveal-layer__item.is-visible img { transform: scale(1); }
+.line__inner { display: inline-block; }
+/* Desktop composition: a stepped left edge, set on the grid */
+.line--2 { padding-left: calc(2 * (var(--col) + var(--grid-gap))); }
+.line--3 { padding-left: 0; }
+.line--4 { padding-left: calc(5 * (var(--col) + var(--grid-gap))); }
+.line--5 { padding-left: calc(3 * (var(--col) + var(--grid-gap))); }
 
-/* ==========================================================================
-   Phase placeholder — gives the hero room to scroll. Removed in phase 02.
-   ========================================================================== */
-.phase-placeholder {
-  min-height: 90vh;
-  padding: var(--space-9) var(--gutter);
+/* ---- Stage: photograph + logo --------------------------------------------- */
+.hero__stage {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  position: relative;
+  margin-top: calc(var(--logo-h) * 0.45 + var(--space-3));   /* room for the logo's upper half */
+}
+.hero__media { margin: 0; will-change: transform; }
+.hero__frame {
+  position: relative;
+  display: block;
+  height: max(42rem, calc(100svh - var(--header-height) - var(--logo-h) * 0.45 - var(--space-8)));
+  overflow: hidden;
+  background: var(--img-ground);
+}
+.hero__plx { position: absolute; inset: -8% 0; display: block; will-change: transform; }
+.hero__img { width: 100%; height: 100%; object-fit: cover; color: transparent; }
+
+/* The logo: a physical white layer laid across the photograph */
+.hero-logo {
+  position: absolute;
+  left: 0;
+  top: calc(var(--logo-h) * -0.45);    /* straddles the photograph's top edge: white on black, negative on the image */
+  width: 100%;
+  z-index: var(--z-logo);
+  mix-blend-mode: difference;
+  overflow: clip;
+  pointer-events: none;
+  will-change: transform;
+}
+.hero-logo__inner { display: block; }
+.hero-logo__svg { display: block; width: 100%; height: auto; }
+@supports not (mix-blend-mode: difference) { .hero-logo { mix-blend-mode: normal; } }
+
+/* ---- Information ------------------------------------------------------------ */
+.hero__info {
+  grid-column: 1 / span 4;
+  grid-row: 3;
+  margin-top: var(--space-9);
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+.hero__support {
+  max-width: 32ch;
+  font-size: var(--text-body-lg);
+  line-height: 1.5;
+}
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-self: start;
+  font-size: var(--text-nav);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+.hero__cta-arrow { display: inline-flex; transition: transform var(--dur-base) var(--ease-out); }
+.hero__cta:hover .hero__cta-arrow { transform: translateX(0.35em); }
+
+.hero__meta {
+  grid-column: 9 / span 4;
+  grid-row: 3;
+  margin-top: var(--space-9);
+  justify-self: end;
+  text-align: right;
+  display: grid;
+  gap: var(--space-2);
   color: var(--fg-muted);
 }
+.hero__time { font-variant-numeric: tabular-nums; }
 
-/* ==========================================================================
-   Tablet 768–1199
-   ========================================================================== */
+/* ---- Tablet ----------------------------------------------------------------- */
 @media (min-width: 768px) and (max-width: 1199px) {
-  .hero { min-height: max(100svh, 52rem); }
-  .hero__meta--studio { grid-column: 6 / span 4; gap: var(--space-4); }
-  .hero__meta--place { display: none; }
-  .hero__body { grid-column: 1 / span 5; }
-
-  .hero-figure--a { --c: 10;  --s: 3; --ratio: 1 / 1; }
-  .hero-figure--b { --c: 5.5; --s: 4.5; --top: 49%; }
-  .hero-figure--c { --c: 9.7; --s: 2.6; --top: 62%; }
-  .hero-figure--d { display: none; }
-  .reg-mark { display: none; }
+  .line--4 { padding-left: calc(4 * (var(--col) + var(--grid-gap))); }
+  .line--5 { padding-left: calc(2 * (var(--col) + var(--grid-gap))); }
+  .hero__info { grid-column: 1 / span 6; }
+  .hero__meta { grid-column: 7 / span 6; }
 }
 
-/* ==========================================================================
-   Mobile ≤767 — recomposed, not shrunk: headline → copy → CTA → images
-   ========================================================================== */
+/* ---- Mobile: recomposed, not shrunk ----------------------------------------- */
 @media (max-width: 767px) {
-  .hero { min-height: auto; }
-
-  .hero__inner {
-    display: flex;
-    flex-direction: column;
-    padding-top: calc(var(--header-height) + var(--space-5));
-    padding-bottom: var(--space-8);
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: calc(var(--header-height) + var(--space-7));
   }
-
-  .hero__label { order: 1; }
-  .hero__meta--studio { display: none; }
-  .hero__title { order: 2; margin-top: var(--space-5); }
-  .line--2 { padding-left: 0; }
-  .hero__body { order: 3; margin-top: var(--space-6); }
-  .hero__support { font-size: var(--text-body-lg); }
-
-  .hero__media {
-    order: 4;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    column-gap: var(--space-3);
-    margin-top: var(--space-8);
-  }
-  .hero-figure {
-    position: relative;
-    left: auto; top: auto;
-    width: auto;
-  }
-  .hero-figure--b { grid-column: 1 / -1; grid-row: 1; }
-  .hero-figure--a { grid-column: 1 / span 3; grid-row: 2; margin-top: var(--space-5); }
-  .hero-figure--c { grid-column: 4 / span 3; grid-row: 2; margin-top: var(--space-9); }
-  .hero-figure--d { grid-column: 2 / span 4; grid-row: 3; margin-top: var(--space-6); }
-
-  .hero__meta--place {
-    order: 5;
-    position: static;
-    max-width: none;
-    margin-top: var(--space-7);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule);
-  }
-
-  .hero__scroll, .reg-mark { display: none; }
+  .hero__label, .hero__title, .hero__stage, .hero__info, .hero__meta { grid-column: 1; }
+  .hero__title { grid-row: 2; padding-inline: var(--space-4); }
+  .line--2 { padding-left: 12vw; }
+  .line--4 { padding-left: 20vw; }
+  .line--5 { padding-left: 8vw; }
+  .hero__stage { grid-row: 2; margin-top: var(--space-4); }
+  .hero__frame { height: max(36rem, calc(100svh - var(--header-height) - 3rem)); }
+  .hero__title { padding-top: calc(var(--logo-h) + var(--space-3) + var(--space-5)); }
+  .hero__label { grid-column: 1; grid-row: 3; margin-top: var(--space-8); }
+  .hero__info { grid-row: 4; margin-top: var(--space-5); }
+  .hero__meta { grid-row: 5; justify-self: start; text-align: left; margin-top: var(--space-7); }
 }

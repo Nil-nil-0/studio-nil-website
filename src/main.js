@@ -1,27 +1,33 @@
-// Self-hosted fonts (same Inter Tight / Inter families as Google Fonts, latin subset only):
-// no third-party request, no layout jump from a late stylesheet.
-import '@fontsource/inter-tight/latin-400.css';
-import '@fontsource/inter-tight/latin-500.css';
-import '@fontsource/inter-tight/latin-600.css';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-500.css';
-import '@fontsource/inter/latin-600.css';
-
+import './styles/fonts.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/header.css';
 import './styles/hero.css';
+import './styles/work.css';
+import './styles/sections.css';
 import './styles/motion.css';
 
-import { initLang, applyTranslations, t } from './i18n/index.js';
+import { initLang, applyTranslations, setLang, onLangChange, getLang, t } from './i18n/index.js';
 import { Header, mountHeader } from './components/Header.js';
-import { Hero, heroImages } from './components/Hero.js';
+import { Hero } from './components/Hero.js';
+import { Logos } from './components/Logos.js';
+import { Work } from './components/Work.js';
+import { Services } from './components/Services.js';
+import { Process } from './components/Process.js';
+import { Global } from './components/Global.js';
+import { Awards } from './components/Awards.js';
+import { Footer } from './components/Footer.js';
+
 import { runIntro } from './motion/intro.js';
 import { initScrollMotion } from './motion/scroll.js';
-import { initHoverReveal } from './motion/reveal.js';
+import { initInView } from './motion/inview.js';
+import { initStatement } from './motion/statement.js';
+import { initWorldMap } from './motion/worldmap.js';
 import { initClock } from './lib/clock.js';
+import { applyFavicon } from './lib/brand.js';
 
 initLang();
+applyFavicon();
 
 const app = document.getElementById('app');
 app.innerHTML = `
@@ -29,18 +35,35 @@ app.innerHTML = `
   ${Header()}
   <main id="main">
     ${Hero()}
-    <!-- PHASE PLACEHOLDER: only here so the hero can be scrolled. Replaced in phase 02. -->
-    <section class="phase-placeholder" id="work" aria-label="Upcoming">
-      <p class="t-meta" data-i18n="placeholder.next">${t('placeholder.next')}</p>
-    </section>
+    ${Logos()}
+    ${Work()}
+    ${Services()}
+    ${Process()}
+    ${Global()}
+    ${Awards()}
   </main>
+  ${Footer()}
 `;
 
 applyTranslations();
 mountHeader(app);
 initClock(app);
 
-const hero = app.querySelector('.hero');
+// Every PT/EN control on the page drives one state.
+app.querySelectorAll('.lang-toggle__btn').forEach((btn) => btn.addEventListener('click', () => setLang(btn.dataset.lang)));
+onLangChange((lang) => {
+  app.querySelectorAll('.lang-toggle__btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  document.querySelector('meta[property="og:locale"]')?.setAttribute('content', t('meta.ogLocale'));
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', t('meta.title'));
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', t('meta.description'));
+});
+
 runIntro(app);
-initScrollMotion(hero);
-initHoverReveal(hero, heroImages);
+initScrollMotion(app.querySelector('.hero'));
+initScrollMotion(app.querySelector('.work'));
+initScrollMotion(app.querySelector('.site-footer'));
+initInView(app.querySelectorAll('.work-item, [data-inview]'));
+initStatement(app.querySelector('[data-statement]'));
+initWorldMap(app.querySelector('.global__map'));
+
+document.documentElement.lang = getLang() === 'pt' ? 'pt-BR' : 'en';

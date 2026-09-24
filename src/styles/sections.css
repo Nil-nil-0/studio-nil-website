@@ -1,0 +1,248 @@
+/* ==========================================================================
+   Sections after the Hero — black, white, spacious. Feature for statements,
+   Clash for everything functional. No cards, rules, icons or boxes.
+   ========================================================================== */
+
+.section__inner {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  padding-inline: var(--gutter);
+}
+.section__label { grid-column: 1 / -1; color: var(--fg-muted); }
+
+/* Entering the viewport: restrained rise (motion/inview.js) */
+html.js [data-inview]:not(.is-inview) { opacity: 0; transform: translate3d(0, 2.5rem, 0); }
+html.js [data-inview] { transition: opacity 1s var(--ease-out), transform 1.2s var(--ease-out); }
+
+/* ==========================================================================
+   Client strip — continuous, slow, faded at both edges
+   ========================================================================== */
+.clients { padding-block: var(--space-9) 0; }
+.clients__mask {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+.clients__track {
+  display: flex;
+  width: max-content;
+  animation: strip 70s linear infinite;
+  will-change: transform;
+}
+.clients__run { display: flex; align-items: center; }
+.clients__item { padding-inline: clamp(2.5rem, 5vw, 6rem); }
+.clients__item img { height: 2rem; width: auto; filter: brightness(0) invert(1); opacity: 0.85; }
+.clients__item--placeholder {
+  font-size: var(--text-strip);
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--fg);
+  opacity: 0.85;
+}
+@keyframes strip { to { transform: translate3d(-25%, 0, 0); } }   /* four identical runs */
+
+/* ==========================================================================
+   Services — large Feature statements read by scrolling
+   ========================================================================== */
+.services { padding-block: var(--section); }
+.services__list { grid-column: 1 / -1; display: grid; gap: var(--space-10); margin-top: var(--space-9); }
+.service {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  align-items: end;
+}
+.service__title {
+  font-family: var(--font-feature);
+  font-size: var(--text-mega);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+.service__text { max-width: 30ch; color: var(--fg-muted); padding-bottom: 0.9em; }
+/* alternating placement gives the list its rhythm */
+.service--a .service__title { grid-column: 1 / span 8; }
+.service--a .service__text  { grid-column: 10 / span 3; }
+.service--b .service__title { grid-column: 4 / span 9; grid-row: 1; }
+.service--b .service__text  { grid-column: 1 / span 3; grid-row: 1; }
+
+/* ==========================================================================
+   How we work
+   ========================================================================== */
+.process { padding-block: var(--section); }
+.process__statement {
+  grid-column: 1 / span 11;
+  margin-top: var(--space-7);
+  font-family: var(--font-feature);
+  font-size: var(--text-xl);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.process__statement .w { transition: opacity 0.45s linear; }
+.process__statement .w.is-dim { opacity: 0.2; }
+
+.process__steps {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--space-10);
+  margin-top: var(--space-12);
+}
+.step { display: grid; gap: var(--space-4); align-content: start; }
+.step--1 { grid-column: 1 / span 5; }
+.step--2 { grid-column: 7 / span 5; margin-top: var(--space-10); }
+.step--3 { grid-column: 2 / span 5; }
+.step--4 { grid-column: 8 / span 5; margin-top: var(--space-10); }
+.step--5 { grid-column: 4 / span 5; }
+.step__title {
+  font-family: var(--font-feature);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+}
+.step__text { max-width: 34ch; color: var(--fg-muted); }
+
+/* ==========================================================================
+   Global work — statement over a pixel map
+   ========================================================================== */
+.global {
+  position: relative;
+  padding-block: var(--section);
+  overflow: hidden;
+}
+.global__map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.global__inner { position: relative; }
+.global__title {
+  grid-column: 1 / -1;
+  margin-top: var(--space-7);
+  font-family: var(--font-feature);
+  font-size: var(--text-mega);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+.global__line { display: block; white-space: nowrap; }
+.global__line + .global__line { padding-left: calc((100% + var(--grid-gap)) / 12 * 3); }
+.global__text { grid-column: 9 / span 4; margin-top: var(--space-9); max-width: 32ch; color: var(--fg-muted); }
+
+/* ==========================================================================
+   Footer — the closing poster
+   ========================================================================== */
+.site-footer {
+  position: relative;
+  padding: var(--section) var(--gutter) var(--space-6);
+  overflow: hidden;
+}
+.footer__cta { display: grid; gap: var(--space-8); justify-items: start; }
+.footer__statement {
+  font-family: var(--font-feature);
+  font-size: var(--text-mega);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+.footer__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-nav);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+.footer__arrow { display: inline-flex; transition: transform var(--dur-base) var(--ease-out); }
+.footer__action:hover .footer__arrow { transform: translate(0.2em, -0.2em); }
+
+.footer__row {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  margin-top: var(--space-11);
+  font-size: var(--text-nav);
+}
+.footer__nav { grid-column: 1 / span 3; }
+.footer__nav ul, .footer__social { display: grid; gap: var(--space-2); }
+.footer__social { grid-column: 4 / span 3; }
+.footer__lang { grid-column: 12; justify-self: end; align-self: start; }
+.footer__nav a:hover, .footer__social a:hover { color: var(--fg-muted); }
+
+.footer__logo {
+  display: block;
+  margin-top: var(--space-9);
+  will-change: transform;
+}
+.footer__svg { display: block; width: 100%; height: auto; }
+.footer__logo .brand__fallback { font-size: 9vw; }
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-6);
+  font-size: var(--text-caption);
+  color: var(--fg-muted);
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .clients__track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; }
+  .clients__run[aria-hidden="true"] { display: none; }
+  .clients__run { flex-wrap: wrap; justify-content: center; row-gap: var(--space-5); }
+  .clients__mask { -webkit-mask-image: none; mask-image: none; }
+  html.js [data-inview]:not(.is-inview) { transform: none; }
+  .process__statement .w.is-dim { opacity: 1; }
+}
+
+/* ==========================================================================
+   Tablet
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .service--a .service__title, .service--b .service__title { grid-column: 1 / -1; grid-row: 1; }
+  .service--a .service__text, .service--b .service__text { grid-column: 7 / span 6; grid-row: 2; margin-top: var(--space-5); }
+  .step--1, .step--3, .step--5 { grid-column: 1 / span 6; }
+  .step--2, .step--4 { grid-column: 7 / span 6; }
+  .global__text { grid-column: 7 / span 6; }
+}
+
+/* ==========================================================================
+   Mobile — art-directed single column
+   ========================================================================== */
+@media (max-width: 767px) {
+  .section__inner, .service, .process__steps, .footer__row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .clients { padding-block: var(--space-7) 0; }
+  .clients__item { padding-inline: 2rem; }
+
+  .services__list { gap: var(--space-9); margin-top: var(--space-8); }
+  .service--a .service__title, .service--b .service__title { grid-column: 1 / -1; grid-row: 1; }
+  .service--b .service__title { padding-left: 10vw; }
+  .service--a .service__text, .service--b .service__text { grid-column: 2 / -1; grid-row: 2; margin-top: var(--space-4); padding-bottom: 0; }
+
+  .process__statement { grid-column: 1 / -1; }
+  .process__steps { row-gap: var(--space-9); margin-top: var(--space-10); }
+  .step { grid-column: 1 / -1 !important; margin-top: 0 !important; }
+  .step:nth-child(even) { padding-left: 12vw; }
+
+  .global__map { opacity: 0.8; }
+  .global__line { white-space: normal; }
+  .global__line + .global__line { padding-left: 0; }
+  .global__text { grid-column: 1 / -1; margin-top: var(--space-8); }
+
+  .footer__row { row-gap: var(--space-6); margin-top: var(--space-10); }
+  .footer__nav { grid-column: 1 / span 3; }
+  .footer__social { grid-column: 4 / span 3; }
+  .footer__lang { grid-column: 1 / -1; justify-self: start; }
+}
