@@ -4,16 +4,15 @@ import { prefersReducedMotion } from './prefs.js';
 
 const SEQUENCE = [
   // [selector, start (s), stagger between matches (s)]
-  ['.site-header .brand', 0.0, 0],
+  ['.site-header .brand', 0.0, 0],                 // the symbol
   ['.site-header .menu-toggle', 0.08, 0],
   ['.site-nav__list > li', 0.1, 0.05],
   ['.site-header__actions', 0.3, 0],
-  ['.hero__label', 0.3, 0],
-  ['.hero__title .line__inner', 0.4, 0.08],     // statement, line by line
-  ['.hero__frame', 0.85, 0],                   // photograph opens
-  ['.hero-logo__inner', 1.2, 0],               // logo rises across it
-  ['.hero__info', 1.4, 0],
-  ['.hero__meta', 1.5, 0],
+  ['.hero__title .line__inner', 0.35, 0.08],       // headline, line by line
+  ['.hero__frame', 0.8, 0.12],                     // large, then the two small images
+  ['.hero__info', 1.1, 0],
+  ['.hero__meta', 1.2, 0],
+  ['.hero-wordmark__inner', 1.25, 0],              // the wordmark closes the Hero
 ];
 
 const FONT_WAIT_MAX = 900; // ms — never hold the page hostage to a slow font

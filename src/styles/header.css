@@ -19,9 +19,8 @@
 }
 
 /* ---- Official logo (inlined SVG, height-driven — never stretched) -------- */
-.brand__logo, .brand__mark { display: inline-flex; }
-.brand__svg { display: block; height: var(--logo-height, 1.375rem); width: auto; max-width: 100%; }
-.brand__mark { display: none; }
+.brand__mark { display: inline-flex; }
+.brand__svg { display: block; height: 1.75rem; width: auto; max-width: 100%; }   /* the symbol: small, refined */
 
 /* Temporary label, shown only while the official SVG files are missing */
 .brand {
@@ -144,9 +143,7 @@ html.menu-lock { overflow: hidden; }
   .site-header__actions { display: none; }
 
   .brand { grid-column: 1 / span 8; }
-  .brand__logo.has-mark { display: none; }
-  .brand__logo.has-mark + .brand__mark { display: inline-flex; }
-  .brand__svg--mark { height: 1.625rem; }
+  .brand__svg { height: 1.5rem; }
 
   .menu-toggle {
     grid-column: 9 / span 4;

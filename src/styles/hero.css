@@ -1,48 +1,29 @@
 /* ==========================================================================
-   Hero — black, layered, editorial.
-   1 · oversized Feature statement, lines set by hand
-   2 · a large photograph on an asymmetric offset
-   3 · the white NIL BRANDS CO. logo crossing it (difference: white on black,
-       negative on the photograph), drifting against the image on scroll
-   4 · minimal Clash information
+   Hero — black, editorial, bracketed by the brand:
+     top      the white symbol (header)
+     1        Feature Display headline, lines set by hand
+     2        image composition: one dominant image + two smaller ones, with
+              black space around them (never full-bleed)
+     bottom   the white wordmark, large, closing the Hero
    ========================================================================== */
 
 .hero {
   --col: calc((100vw - 2 * var(--gutter) - 11 * var(--grid-gap)) / 12);
-  /* the logo spans the content width; its height follows the SVG's own ratio */
-  --logo-h: calc((100vw - 2 * var(--gutter)) * var(--logo-ratio, 0.12));
+  --x: calc(var(--col) + var(--grid-gap));          /* one column step */
   position: relative;
-  isolation: isolate;                  /* the blend reads only the hero's own layers */
   background: var(--bg);
-  display: grid;
-  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-  column-gap: var(--grid-gap);
-  padding: calc(var(--header-height) + var(--space-5)) var(--gutter) var(--section);
+  padding: calc(var(--header-height) + var(--space-9)) var(--gutter) var(--space-9);
 }
 
-/* ---- Label ---------------------------------------------------------------- */
-.hero__label {
-  grid-column: 5 / span 4;
-  grid-row: 3;
-  margin-top: var(--space-9);
-  color: var(--fg-muted);
-}
-
-/* ---- Statement (Feature, manual lines) ----------------------------------- */
+/* ---- 1 · Headline (Feature, manual lines) --------------------------------- */
 .hero__title {
-  grid-column: 1 / -1;
-  grid-row: 2;                         /* same cell as the stage: type laid over the photograph */
-  align-self: start;
-  /* starts under the part of the logo that sits inside the photograph */
-  padding: calc(var(--logo-h) + var(--space-3) + var(--space-6)) var(--space-7) 0;
+  position: relative;
+  z-index: var(--z-content);
   font-family: var(--font-feature);
   font-size: var(--text-hero);
   font-weight: 400;
   line-height: var(--leading-display);
   letter-spacing: var(--tracking-display);
-  position: relative;
-  z-index: var(--z-content);
-  pointer-events: none;
 }
 .hero__lines { display: block; }
 .line {
@@ -50,70 +31,74 @@
   overflow: clip;
   overflow-clip-margin: 0.14em;
   padding-bottom: 0.03em;
-  white-space: nowrap;                 /* the line breaks are designed, never accidental */
-  will-change: transform;
+  white-space: nowrap;                /* line breaks are designed, never accidental */
 }
 .line__inner { display: inline-block; }
-/* Desktop composition: a stepped left edge, set on the grid */
-.line--2 { padding-left: calc(2 * (var(--col) + var(--grid-gap))); }
-.line--3 { padding-left: 0; }
-.line--4 { padding-left: calc(5 * (var(--col) + var(--grid-gap))); }
-.line--5 { padding-left: calc(3 * (var(--col) + var(--grid-gap))); }
+.line--2 { padding-left: calc(2 * var(--x)); }
+.line--4 { padding-left: calc(4 * var(--x)); }
+.line--5 { padding-left: calc(3 * var(--x)); }
 
-/* ---- Stage: photograph + logo --------------------------------------------- */
-.hero__stage {
-  grid-column: 1 / -1;
-  grid-row: 2;
+/* ---- 2 · Image composition -------------------------------------------------- */
+.hero__composition {
   position: relative;
-  margin-top: calc(var(--logo-h) * 0.45 + var(--space-3));   /* room for the logo's upper half */
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  align-items: start;
+  margin-top: var(--space-9);
 }
-.hero__media { margin: 0; will-change: transform; }
+
+.hero__img { margin: 0; will-change: transform; }
 .hero__frame {
   position: relative;
   display: block;
-  height: max(42rem, calc(100svh - var(--header-height) - var(--logo-h) * 0.45 - var(--space-8)));
   overflow: hidden;
   background: var(--img-ground);
 }
 .hero__plx { position: absolute; inset: -8% 0; display: block; will-change: transform; }
-.hero__img { width: 100%; height: 100%; object-fit: cover; color: transparent; }
+.hero__plx img { width: 100%; height: 100%; object-fit: cover; color: transparent; }
 
-/* The logo: a physical white layer laid across the photograph */
-.hero-logo {
+/* dominant image — strong landscape crop, off-centre */
+.hero__img--large { grid-column: 3 / span 7; grid-row: 1; }
+.hero__img--large .hero__frame { aspect-ratio: 3 / 2; }
+
+/* small A — portrait, up beside the headline's short lines */
+.hero__img--small-a {
   position: absolute;
-  left: 0;
-  top: calc(var(--logo-h) * -0.45);    /* straddles the photograph's top edge: white on black, negative on the image */
-  width: 100%;
-  z-index: var(--z-logo);
-  mix-blend-mode: difference;
-  overflow: clip;
-  pointer-events: none;
-  will-change: transform;
+  right: 0;
+  bottom: calc(100% + var(--space-9) + 0.9 * var(--text-hero));
+  width: calc(2.5 * var(--col) + 2 * var(--grid-gap));
 }
-.hero-logo__inner { display: block; }
-.hero-logo__svg { display: block; width: 100%; height: auto; }
-@supports not (mix-blend-mode: difference) { .hero-logo { mix-blend-mode: normal; } }
+.hero__img--small-a .hero__frame { aspect-ratio: 3 / 4; }
 
-/* ---- Information ------------------------------------------------------------ */
+/* small B — square, laps over the large image's lower right edge */
+.hero__img--small-b {
+  grid-column: 9 / span 2;
+  grid-row: 1;
+  margin-left: calc(0.6 * var(--x));
+  /* lands at ~60% of the large image's height (7 cols wide, 3:2) */
+  margin-top: calc((7 * var(--col) + 6 * var(--grid-gap)) * 0.667 * 0.6);
+  position: relative;
+  z-index: 1;
+}
+.hero__img--small-b .hero__frame { aspect-ratio: 1 / 1; }
+
+/* minimal Clash information */
 .hero__info {
-  grid-column: 1 / span 4;
-  grid-row: 3;
-  margin-top: var(--space-9);
+  grid-column: 1 / span 2;
+  grid-row: 1;
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-5);
   align-content: start;
 }
-.hero__support {
-  max-width: 32ch;
-  font-size: var(--text-body-lg);
-  line-height: 1.5;
-}
+.hero__label { color: var(--fg-muted); }
+.hero__support { font-size: var(--text-caption); line-height: 1.55; max-width: 24ch; }
 .hero__cta {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   justify-self: start;
-  font-size: var(--text-nav);
+  font-size: var(--text-meta);
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-meta);
   text-transform: uppercase;
@@ -122,40 +107,49 @@
 .hero__cta:hover .hero__cta-arrow { transform: translateX(0.35em); }
 
 .hero__meta {
-  grid-column: 9 / span 4;
-  grid-row: 3;
-  margin-top: var(--space-9);
+  grid-column: 11 / span 2;
+  grid-row: 1;
   justify-self: end;
   text-align: right;
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   color: var(--fg-muted);
 }
 .hero__time { font-variant-numeric: tabular-nums; }
 
-/* ---- Tablet ----------------------------------------------------------------- */
+/* ---- Bottom · the wordmark ---------------------------------------------------- */
+.hero-wordmark {
+  margin-top: var(--space-10);
+  overflow: clip;
+  will-change: transform;
+}
+.hero-wordmark__inner { display: block; }
+.hero-wordmark__svg { display: block; width: 100%; height: auto; }
+
+/* ---- Tablet ------------------------------------------------------------------- */
 @media (min-width: 768px) and (max-width: 1199px) {
-  .line--4 { padding-left: calc(4 * (var(--col) + var(--grid-gap))); }
-  .line--5 { padding-left: calc(2 * (var(--col) + var(--grid-gap))); }
-  .hero__info { grid-column: 1 / span 6; }
-  .hero__meta { grid-column: 7 / span 6; }
+  .line--4 { padding-left: calc(4 * var(--x)); }
+  .line--5 { padding-left: calc(2 * var(--x)); }
+  .hero__img--large { grid-column: 3 / span 7; }
+  .hero__img--small-a { width: calc(3 * var(--col) + 2 * var(--grid-gap)); bottom: calc(100% + var(--space-9) + 0.3 * var(--text-hero)); }
+  .hero__img--small-b { grid-column: 9 / span 3; margin-top: calc((7 * var(--col) + 6 * var(--grid-gap)) * 0.667 * 0.55); }
+  .hero__info { grid-column: 1 / span 2; }
+  .hero__meta { grid-column: 1 / span 4; grid-row: 2; justify-self: start; text-align: left; margin-top: var(--space-7); }
 }
 
-/* ---- Mobile: recomposed, not shrunk ----------------------------------------- */
+/* ---- Mobile: same hierarchy, recomposed ---------------------------------------- */
 @media (max-width: 767px) {
-  .hero {
-    grid-template-columns: minmax(0, 1fr);
-    padding-top: calc(var(--header-height) + var(--space-7));
-  }
-  .hero__label, .hero__title, .hero__stage, .hero__info, .hero__meta { grid-column: 1; }
-  .hero__title { grid-row: 2; padding-inline: var(--space-4); }
+  .hero { padding-top: calc(var(--header-height) + var(--space-8)); }
   .line--2 { padding-left: 12vw; }
   .line--4 { padding-left: 20vw; }
   .line--5 { padding-left: 8vw; }
-  .hero__stage { grid-row: 2; margin-top: var(--space-4); }
-  .hero__frame { height: max(36rem, calc(100svh - var(--header-height) - 3rem)); }
-  .hero__title { padding-top: calc(var(--logo-h) + var(--space-3) + var(--space-5)); }
-  .hero__label { grid-column: 1; grid-row: 3; margin-top: var(--space-8); }
-  .hero__info { grid-row: 4; margin-top: var(--space-5); }
-  .hero__meta { grid-row: 5; justify-self: start; text-align: left; margin-top: var(--space-7); }
+
+  .hero__composition { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: var(--space-8); }
+  .hero__img--large { grid-column: 1 / span 5; grid-row: 1; }
+  .hero__img--large .hero__frame { aspect-ratio: 4 / 5; }
+  .hero__img--small-a { display: none; }            /* 1 large + 1 small on phones */
+  .hero__img--small-b { grid-column: 4 / span 3; grid-row: 2; margin: -22% 0 0; }
+  .hero__info { grid-column: 1 / -1; grid-row: 3; margin-top: var(--space-8); }
+  .hero__meta { grid-column: 1 / -1; grid-row: 4; justify-self: start; text-align: left; margin-top: var(--space-6); }
+  .hero-wordmark { margin-top: var(--space-9); }
 }

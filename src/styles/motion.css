@@ -8,29 +8,29 @@ html.js:not(.is-ready) [data-intro] { opacity: 0; transform: translate3d(0, 1rem
 
 /* Statement lines and the logo rise from behind their own masks */
 html.js:not(.is-ready) .line__inner[data-intro],
-html.js:not(.is-ready) .hero-logo__inner[data-intro] { opacity: 1; transform: translate3d(0, 105%, 0); }
+html.js:not(.is-ready) .hero-wordmark__inner[data-intro] { opacity: 1; transform: translate3d(0, 105%, 0); }
 
 /* The photograph opens from the bottom edge */
 html.js:not(.is-ready) .hero__frame[data-intro] { opacity: 1; transform: none; clip-path: inset(100% 0 0 0); }
-html.js:not(.is-ready) .hero__frame[data-intro] .hero__img { transform: scale(1.14); }
+html.js:not(.is-ready) .hero__frame[data-intro] img { transform: scale(1.14); }
 
 html.js.is-ready [data-intro] {
   transition: opacity 0.7s var(--ease-out) var(--d, 0s), transform 0.8s var(--ease-out) var(--d, 0s);
 }
 html.js.is-ready .line__inner[data-intro],
-html.js.is-ready .hero-logo__inner[data-intro] { transition: transform 1.1s var(--ease-out) var(--d, 0s); }
+html.js.is-ready .hero-wordmark__inner[data-intro] { transition: transform 1.1s var(--ease-out) var(--d, 0s); }
 html.js.is-ready .hero__frame[data-intro] { transition: clip-path 1.2s var(--ease-reveal) var(--d, 0s); clip-path: inset(0 0 0 0); }
-html.js.is-ready .hero__frame[data-intro] .hero__img { transition: transform 1.8s var(--ease-out) var(--d, 0s); }
+html.js.is-ready .hero__frame[data-intro] img { transition: transform 1.8s var(--ease-out) var(--d, 0s); }
 
 @media (prefers-reduced-motion: reduce) {
   html.js:not(.is-ready) [data-intro],
   html.js:not(.is-ready) .line__inner[data-intro],
-  html.js:not(.is-ready) .hero-logo__inner[data-intro] { transform: none; }
+  html.js:not(.is-ready) .hero-wordmark__inner[data-intro] { transform: none; }
   html.js:not(.is-ready) .hero__frame[data-intro] { clip-path: none; }
-  html.js:not(.is-ready) .hero__frame[data-intro] .hero__img { transform: none; }
+  html.js:not(.is-ready) .hero__frame[data-intro] img { transform: none; }
   html.js.is-ready [data-intro],
   html.js.is-ready .line__inner[data-intro],
-  html.js.is-ready .hero-logo__inner[data-intro],
+  html.js.is-ready .hero-wordmark__inner[data-intro],
   html.js.is-ready .hero__frame[data-intro] { transition: opacity 0.3s linear; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

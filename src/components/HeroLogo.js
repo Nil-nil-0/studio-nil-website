@@ -1,18 +1,16 @@
-// The Hero's brand statement: the official WHITE logo SVG, inlined as supplied.
-// Preference: type-white (NIL BRANDS CO.) → logotipo-white. With
-// mix-blend-mode: difference it stays white over black and turns into the
-// negative of the photograph where it crosses it.
+// The Hero's closing signature: the official WHITE wordmark SVG (type-white —
+// "NIL BRANDS CO.", without the symbol, which already sits at the top of the page).
+// Inlined as supplied; sized by width, never distorted.
 import { brandAsset } from '../lib/brand.js';
 
-const logo = brandAsset('type', 'white', 'hero-logo__svg') || brandAsset('logotipo', 'white', 'hero-logo__svg');
+const wordmark = brandAsset('type', 'white', 'hero-wordmark__svg') || brandAsset('logotipo', 'white', 'hero-wordmark__svg');
 
-export const hasHeroLogo = Boolean(logo);
-export const heroLogoRatio = logo?.ratio ?? 0.12;
+export const hasHeroWordmark = Boolean(wordmark);
 
-export function HeroLogo() {
-  if (!logo) return '';
+export function HeroWordmark() {
+  if (!wordmark) return '';
   return `
-  <div class="hero-logo" role="img" aria-label="Nil Brands Co." data-speed="-0.14" data-speed-x="-0.04" data-drift-mobile="0.5">
-    <div class="hero-logo__inner" data-intro>${logo.markup}</div>
+  <div class="hero-wordmark" role="img" aria-label="Nil Brands Co." data-speed="-0.05">
+    <div class="hero-wordmark__inner" data-intro>${wordmark.markup}</div>
   </div>`;
 }

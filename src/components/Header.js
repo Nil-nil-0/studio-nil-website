@@ -3,14 +3,13 @@ import { navItems, contactCta, site } from '../data/site.js';
 import { arrowUpRight } from './icons.js';
 import { brandAsset } from '../lib/brand.js';
 
-const logo = brandAsset('logotipo', 'white', 'brand__svg');
+// Header shows ONLY the official white brand symbol. The full wordmark is kept
+// for the lower part of the Hero and the footer.
 const mark = brandAsset('symbol', 'white', 'brand__svg brand__svg--mark');
 
-// Official logo (logotipo) in the header; the symbol replaces it on phones when
-// supplied. Without the files, a temporary text label keeps the header usable.
 function brandMarkup() {
-  if (!logo) return `<span class="brand__fallback" data-missing-asset="logotipo-white.svg">${site.name}</span>`;
-  return `<span class="brand__logo${mark ? ' has-mark' : ''}">${logo.markup}</span>${mark ? `<span class="brand__mark">${mark.markup}</span>` : ''}`;
+  if (!mark) return `<span class="brand__fallback" data-missing-asset="symbol-white.svg">${site.name}</span>`;
+  return `<span class="brand__mark">${mark.markup}</span>`;
 }
 
 // Header: wordmark · three quiet links · language · one clear action.
