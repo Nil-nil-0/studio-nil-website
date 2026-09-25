@@ -24,7 +24,7 @@ export default {
   },
   hero: {
     label: 'Estratégia / Identidade / Experiência',
-    headline: ['Construímos', 'marcas com', 'estratégia,', 'caráter', 'e clareza.'],
+    headline: ['Construímos', 'marcas com', ['estratégia, caráter', 'e clareza.']],   // 3 linhas; a 3ª se divide em duas no celular
     headlineA11y: 'Construímos marcas com estratégia, caráter e clareza.',
     support: 'Estúdio independente de branding focado em estratégia, identidade e experiências digitais para negócios ambiciosos.',
     ctaPrimary: 'Ver trabalhos selecionados',

@@ -1,26 +1,37 @@
 /* ==========================================================================
-   Hero — black, editorial, bracketed by the brand:
+   Hero — black, editorial, one composition bracketed by the brand:
      top      the white symbol (header)
-     1        Feature Display headline, lines set by hand
-     2        image composition: one dominant image + two smaller ones, with
+     body     Feature Display headline in three art-directed rows, then the
+              image composition: one dominant image + two smaller ones, with
               black space around them (never full-bleed)
-     bottom   the white wordmark, large, closing the Hero
+     foot     a reserved bottom zone holding the full white wordmark — the
+              Hero's signature and its last element
+   The Hero is a two-row grid (body · foot) at least one viewport tall; the
+   foot row is always last, so the wordmark stays inside the Hero at every size.
    ========================================================================== */
 
 .hero {
   --col: calc((100vw - 2 * var(--gutter) - 11 * var(--grid-gap)) / 12);
   --x: calc(var(--col) + var(--grid-gap));          /* one column step */
+  /* headline size: the Feature scale, capped so the long third row always fits */
+  --hero-fs: min(var(--text-hero), calc((100vw - 2 * var(--gutter)) / 11.9));
+  --hero-row: calc(0.93 * var(--hero-fs));          /* one headline row (leading + clip pad) */
   position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;                     /* body · foot */
+  min-height: 100vh;
+  min-height: 100svh;
   background: var(--bg);
-  padding: calc(var(--header-height) + var(--space-9)) var(--gutter) var(--space-9);
+  padding: calc(var(--header-height) + var(--space-9)) var(--gutter) 0;
 }
+.hero__body { position: relative; align-self: start; }
 
-/* ---- 1 · Headline (Feature, manual lines) --------------------------------- */
+/* ---- 1 · Headline (Feature, three rows, set by hand) ------------------------ */
 .hero__title {
   position: relative;
   z-index: var(--z-content);
   font-family: var(--font-feature);
-  font-size: var(--text-hero);
+  font-size: var(--hero-fs);
   font-weight: 400;
   line-height: var(--leading-display);
   letter-spacing: var(--tracking-display);
@@ -28,15 +39,20 @@
 .hero__lines { display: block; }
 .line {
   display: block;
+  white-space: nowrap;                /* line breaks are designed, never accidental */
+}
+.line__seg {
+  display: inline-block;
+  vertical-align: top;
   overflow: clip;
   overflow-clip-margin: 0.14em;
   padding-bottom: 0.03em;
-  white-space: nowrap;                /* line breaks are designed, never accidental */
 }
+.line__seg + .line__seg { margin-left: 0.18em; }  /* the word space between segments */
 .line__inner { display: inline-block; }
-.line--2 { padding-left: calc(2 * var(--x)); }
-.line--4 { padding-left: calc(4 * var(--x)); }
-.line--5 { padding-left: calc(3 * var(--x)); }
+/* irregular rhythm: a short step in, a longer step in, then the long row from the edge */
+.line--1 { padding-left: var(--x); }
+.line--2 { padding-left: calc(3 * var(--x)); }
 
 /* ---- 2 · Image composition -------------------------------------------------- */
 .hero__composition {
@@ -66,10 +82,11 @@
 .hero__img--small-a {
   position: absolute;
   right: 0;
-  bottom: calc(100% + var(--space-9) + 0.9 * var(--text-hero));
-  width: calc(2.5 * var(--col) + 2 * var(--grid-gap));
+  /* rests just above the long third row, beside the two short rows */
+  bottom: calc(100% + var(--space-9) + var(--hero-row) + var(--space-6));
+  width: min(calc(2 * var(--col) + var(--grid-gap)), 13.5rem);
 }
-.hero__img--small-a .hero__frame { aspect-ratio: 3 / 4; }
+.hero__img--small-a .hero__frame { aspect-ratio: 4 / 5; }
 
 /* small B — square, laps over the large image's lower right edge */
 .hero__img--small-b {
@@ -117,21 +134,24 @@
 }
 .hero__time { font-variant-numeric: tabular-nums; }
 
-/* ---- Bottom · the wordmark ---------------------------------------------------- */
+/* ---- Foot · the wordmark (reserved bottom zone of the Hero) ---------------- */
+.hero__foot {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  align-items: end;
+  padding-block: var(--space-10) var(--space-9);   /* air above; the Hero ends below it */
+}
 .hero-wordmark {
-  margin-top: var(--space-10);
+  grid-column: 4 / -1;                /* bottom right: the Hero is signed */
   overflow: clip;
-  will-change: transform;
 }
 .hero-wordmark__inner { display: block; }
 .hero-wordmark__svg { display: block; width: 100%; height: auto; }
 
 /* ---- Tablet ------------------------------------------------------------------- */
 @media (min-width: 768px) and (max-width: 1199px) {
-  .line--4 { padding-left: calc(4 * var(--x)); }
-  .line--5 { padding-left: calc(2 * var(--x)); }
   .hero__img--large { grid-column: 3 / span 7; }
-  .hero__img--small-a { width: calc(3 * var(--col) + 2 * var(--grid-gap)); bottom: calc(100% + var(--space-9) + 0.3 * var(--text-hero)); }
   .hero__img--small-b { grid-column: 9 / span 3; margin-top: calc((7 * var(--col) + 6 * var(--grid-gap)) * 0.667 * 0.55); }
   .hero__info { grid-column: 1 / span 2; }
   .hero__meta { grid-column: 1 / span 4; grid-row: 2; justify-self: start; text-align: left; margin-top: var(--space-7); }
@@ -139,10 +159,15 @@
 
 /* ---- Mobile: same hierarchy, recomposed ---------------------------------------- */
 @media (max-width: 767px) {
-  .hero { padding-top: calc(var(--header-height) + var(--space-8)); }
-  .line--2 { padding-left: 12vw; }
-  .line--4 { padding-left: 20vw; }
-  .line--5 { padding-left: 8vw; }
+  .hero {
+    padding-top: calc(var(--header-height) + var(--space-8));
+    /* the third row stacks here, so its widest segment sets the cap */
+    --hero-fs: min(var(--text-hero), calc((100vw - 2 * var(--gutter)) / 7.5));
+  }
+  .line--1 { padding-left: 0; }
+  .line--2 { padding-left: 14vw; }
+  .line--3 .line__seg { display: block; width: max-content; }
+  .line--3 .line__seg + .line__seg { margin-left: 0; padding-left: 24vw; }
 
   .hero__composition { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: var(--space-8); }
   .hero__img--large { grid-column: 1 / span 5; grid-row: 1; }
@@ -151,5 +176,6 @@
   .hero__img--small-b { grid-column: 4 / span 3; grid-row: 2; margin: -22% 0 0; }
   .hero__info { grid-column: 1 / -1; grid-row: 3; margin-top: var(--space-8); }
   .hero__meta { grid-column: 1 / -1; grid-row: 4; justify-self: start; text-align: left; margin-top: var(--space-6); }
-  .hero-wordmark { margin-top: var(--space-9); }
+  .hero__foot { grid-template-columns: repeat(6, minmax(0, 1fr)); padding-block: var(--space-9) var(--space-8); }
+  .hero-wordmark { grid-column: 1 / -1; }
 }

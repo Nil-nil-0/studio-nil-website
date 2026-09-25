@@ -5,16 +5,29 @@ import { HeroWordmark } from './HeroLogo.js';
 import { arrowRight } from './icons.js';
 
 // Hero hierarchy (top → bottom):
-//   symbol (header) · Feature headline, manual lines · image composition
-//   (1 large + 2 small) with minimal Clash info · the white wordmark closing the Hero.
+//   symbol (header) · Feature headline in three art-directed rows · image
+//   composition (1 large + 2 small) with minimal Clash info · a reserved foot
+//   zone holding the full white wordmark, which closes (signs) the Hero.
+//
+// A headline row is a string or an array of segments. Segments sit on one row
+// on desktop and stack on phones, each clipped for the line-by-line intro.
+function Segment(text, key) {
+  return `<span class="line__seg"><span class="line__inner" data-intro data-i18n="${key}">${text}</span></span>`;
+}
+
 function Headline() {
-  const lines = t('hero.headline');
+  const rows = t('hero.headline');
   return `
   <h1 class="hero__title" id="hero-title">
     <span class="visually-hidden" data-i18n="hero.headlineA11y">${t('hero.headlineA11y')}</span>
     <span class="hero__lines" aria-hidden="true">
-      ${lines
-        .map((line, i) => `<span class="line line--${i + 1}"><span class="line__inner" data-intro data-i18n="hero.headline.${i}">${line}</span></span>`)
+      ${rows
+        .map((row, i) => {
+          const segs = Array.isArray(row)
+            ? row.map((seg, k) => Segment(seg, `hero.headline.${i}.${k}`)).join('')
+            : Segment(row, `hero.headline.${i}`);
+          return `<span class="line line--${i + 1}">${segs}</span>`;
+        })
         .join('')}
     </span>
   </h1>`;
@@ -52,10 +65,12 @@ function Info() {
 export function Hero() {
   return `
   <section class="hero" id="top" aria-labelledby="hero-title">
-    ${Headline()}
-    <div class="hero__composition">
-      ${heroImages.map(Image).join('')}
-      ${Info()}
+    <div class="hero__body">
+      ${Headline()}
+      <div class="hero__composition">
+        ${heroImages.map(Image).join('')}
+        ${Info()}
+      </div>
     </div>
     ${HeroWordmark()}
   </section>`;

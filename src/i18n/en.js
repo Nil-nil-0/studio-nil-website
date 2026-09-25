@@ -25,7 +25,7 @@ export default {
   },
   hero: {
     label: 'Brand Strategy / Identity / Experience',
-    headline: ['We build', 'brands with', 'strategy,', 'character', 'and clarity.'],
+    headline: ['We build', 'brands with', ['strategy, character', 'and clarity.']],   // 3 rows; row 3 splits in two on phones
     headlineA11y: 'We build brands with strategy, character and clarity.',
     support: 'Independent brand studio focused on strategy, identity and digital experiences for ambitious businesses.',
     ctaPrimary: 'View selected work',
