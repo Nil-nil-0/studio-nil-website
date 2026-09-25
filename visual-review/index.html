@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Studio Nil — Visual Review</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#000000" />
+    <style>
+      :root {
+        --bg: #000;
+        --fg: #fff;
+        --muted: rgba(255, 255, 255, 0.55);
+        --gutter: clamp(16px, 3vw, 48px);
+        --gap: clamp(24px, 3vw, 56px);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--bg); color: var(--fg); }
+      body { padding: var(--gutter); min-height: 100vh; }
+
+      header { margin-bottom: var(--gap); }
+      h1 {
+        margin: 0;
+        font-size: clamp(28px, 5vw, 64px);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+      header p { margin: 0.9em 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+      .shots {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--gap);
+        align-items: start;
+      }
+      /* Desktop: side by side, each screenshot keeps its real proportions. */
+      @media (min-width: 900px) {
+        .shots { grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); }
+      }
+
+      figure { margin: 0; min-width: 0; }
+      figcaption {
+        display: flex;
+        justify-content: space-between;
+        gap: 1em;
+        margin-bottom: 12px;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      figcaption span { color: var(--muted); }
+      figcaption a { color: var(--fg); text-decoration: none; }
+      figcaption a:hover, figcaption a:focus-visible { text-decoration: underline; }
+      figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: #111;
+      }
+      /* Stacked on phones: keep the mobile capture at its natural width. */
+      .shot--mobile img { max-width: 390px; }
+      @media (min-width: 900px) { .shot--mobile img { max-width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Studio Nil — Visual Review</h1>
+      <p>Full-page screenshots of the production build, updated automatically on every push to <code>main</code>.</p>
+    </header>
+
+    <main class="shots">
+      <figure class="shot shot--desktop">
+        <figcaption>Desktop <span>1440 × 900</span> <a href="desktop.png?v=__VERSION__" target="_blank" rel="noopener">Open full size ↗</a></figcaption>
+        <img src="desktop.png?v=__VERSION__" alt="Full-page screenshot of the Studio Nil Brands website at 1440 px wide" width="1440" height="10041" />
+      </figure>
+      <figure class="shot shot--mobile">
+        <figcaption>Mobile <span>390 × 844</span> <a href="mobile.png?v=__VERSION__" target="_blank" rel="noopener">Open ↗</a></figcaption>
+        <img src="mobile.png?v=__VERSION__" alt="Full-page screenshot of the Studio Nil Brands website at 390 px wide" width="390" height="8093" />
+      </figure>
+    </main>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 # Build the Vite site and publish it to GitHub Pages:
 # https://nil-nil-0.github.io/studio-nil-website/
+# Visual review: https://nil-nil-0.github.io/studio-nil-website/visual-review/
 name: Deploy to GitHub Pages
 
 on:
@@ -29,6 +30,13 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /studio-nil-website/
+      # Visual review page (visual-review/) published alongside the site, at /visual-review/.
+      # Copied after the build, so the site itself is untouched.
+      - name: Add visual review page
+        run: |
+          mkdir -p dist/visual-review
+          cp visual-review/index.html visual-review/desktop.png visual-review/mobile.png dist/visual-review/
+          sed -i "s/__VERSION__/${GITHUB_SHA::7}/g" dist/visual-review/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
