@@ -1,0 +1,62 @@
+# Captures full-page screenshots of the production build after every push to main
+# and commits them to visual-review/ (desktop.png 1440×900 · mobile.png 390×844).
+#
+# No loop: the bot commit is pushed with GITHUB_TOKEN (GitHub never starts new
+# workflow runs from those pushes), carries [skip ci], touches only visual-review/
+# (ignored below), and the job skips runs started by github-actions[bot].
+name: Visual review screenshots
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'visual-review/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: visual-review
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build, serve and capture
+        run: npm run visual-review
+
+      - name: Commit screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual-review/desktop.png visual-review/mobile.png
+          if git diff --cached --quiet; then
+            echo "Screenshots unchanged — nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore: update visual review screenshots" -m "[skip ci]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            echo "Push attempt $attempt failed; retrying…"
+            sleep 5
+          done
+          exit 1

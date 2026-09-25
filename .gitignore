@@ -2,3 +2,9 @@ node_modules
 dist
 .DS_Store
 Claude outputs/
+
+# Playwright temporary files
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
