@@ -11,5 +11,15 @@ const PAGES_BASE = '/studio-nil-website/';
 export default defineConfig(({ command, mode }) =>
   mode === 'single'
     ? { plugins: [viteSingleFile()], build: { outDir: 'preview', emptyOutDir: true } }
-    : { base: process.env.BASE_PATH || (command === 'build' ? PAGES_BASE : '/') }
+    : {
+        base: process.env.BASE_PATH || (command === 'build' ? PAGES_BASE : '/'),
+        build: {
+          rollupOptions: {
+            input: {
+              main: 'index.html',
+              experimental: 'experimental/index.html',
+            },
+          },
+        },
+      }
 );
